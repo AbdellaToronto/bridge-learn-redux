@@ -1,20 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { AppContainer } from './features/app/app.container';
+import { fetchPokemons } from './features/app/app.actions';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-
-import App from './App';
+import { rootReducer } from './reducers';
 import './index.css';
-import reducer from './reducers';
 
-const store = createStore(reducer,
-  applyMiddleware(thunk), // this is how thunk is integrated into the redux library
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(
+  rootReducer,
+  compose(
+    applyMiddleware(thunk),
+    window.__REDUX_DEVTOOLS_EXTENSION__ &&
+      window.__REDUX_DEVTOOLS_EXTENSION__(),
+  ),
+);
 
 ReactDOM.render(
-  <Provider store={ store }>
-    <App />
+  <Provider store={store}>
+    <AppContainer />
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
+
+// You can also use the component did mount hook to make this ajax call in the App component.
+// But since this also only runs once, I figured it was easier to fire it here.
+store.dispatch(fetchPokemons());

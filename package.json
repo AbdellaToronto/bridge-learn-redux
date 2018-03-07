@@ -12,6 +12,7 @@
   "dependencies": {
     "faker": "*",
     "jquery": "*",
+    "ramda": "^0.25.0",
     "react": "*",
     "react-dom": "*",
     "react-redux": "*",
